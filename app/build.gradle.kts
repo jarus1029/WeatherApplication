@@ -41,8 +41,12 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
+    //room db
+
     implementation (libs.room.runtime)
     annotationProcessor (libs.room.compiler)
+
+    //retrofit
 
     implementation (libs.retrofit)
     implementation (libs.converter.gson)

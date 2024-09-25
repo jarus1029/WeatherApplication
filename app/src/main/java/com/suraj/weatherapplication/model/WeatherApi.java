@@ -1,6 +1,6 @@
-package com.suraj.weatherapplication.dao;
+package com.suraj.weatherapplication.model;
 
-import com.suraj.weatherapplication.dto.WeatherResponse;
+import com.suraj.weatherapplication.data.WeatherResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

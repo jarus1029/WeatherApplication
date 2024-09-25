@@ -1,18 +1,21 @@
-package com.suraj.weatherapplication.entity;
+package com.suraj.weatherapplication.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 @Entity(tableName = "weather")
 public class WeatherEntity {
     @PrimaryKey
     @NonNull
     public String cityName;
-    public String[] weatherData;
+
+    @TypeConverters(WeatherDataConverter.class)
+    public WeatherData weatherData;
     public long timestamp;
 
-    public WeatherEntity(String cityName, String[] weatherData, long timestamp) {
+    public WeatherEntity(String cityName, WeatherData weatherData, long timestamp) {
         this.cityName = cityName;
         this.weatherData = weatherData;
         this.timestamp = timestamp;
@@ -27,11 +30,11 @@ public class WeatherEntity {
         this.cityName = cityName;
     }
 
-    public String[] getWeatherData() {
+    public WeatherData getWeatherData() {
         return weatherData;
     }
 
-    public void setWeatherData(String[] weatherData) {
+    public void setWeatherData(WeatherData weatherData) {
         this.weatherData = weatherData;
     }
 

@@ -13,6 +13,7 @@
         android:id="@+id/innerLayout"
         android:background="@drawable/bg">
 
+
         <EditText
             android:id="@+id/citySearch"
             android:layout_width="match_parent"
@@ -23,28 +24,28 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.024" />
+            app:layout_constraintVertical_bias="0.056" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <ImageView
             android:id="@+id/searchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/search_button_bg"
-            android:elevation="10dp"
-            android:text="Search"
-            android:textStyle="bold"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/search_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/citySearch"
+            app:layout_constraintHorizontal_bias="0.952"
             app:layout_constraintStart_toStartOf="@+id/citySearch"
-            app:layout_constraintTop_toBottomOf="@+id/citySearch"
-            app:layout_constraintVertical_bias="0.05" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.066" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:text="Recents"
             android:textColor="@android:color/white"
             android:textSize="20sp"
@@ -52,7 +53,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchButton" />
+            app:layout_constraintTop_toBottomOf="@+id/citySearch" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"

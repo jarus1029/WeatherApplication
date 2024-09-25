@@ -1,4 +1,4 @@
-package com.suraj.weatherapplication.database;
+package com.suraj.weatherapplication.model;
 
 import android.content.Context;
 
@@ -7,12 +7,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.suraj.weatherapplication.dao.WeatherDao;
-import com.suraj.weatherapplication.entity.Converters;
-import com.suraj.weatherapplication.entity.WeatherEntity;
-
 @Database(entities = {WeatherEntity.class}, version = 1)
-@TypeConverters({Converters.class})
+@TypeConverters({WeatherDataConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract WeatherDao weatherDao();
 

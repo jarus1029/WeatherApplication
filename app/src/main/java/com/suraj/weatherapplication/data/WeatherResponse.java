@@ -1,8 +1,10 @@
-package com.suraj.weatherapplication.dto;
+package com.suraj.weatherapplication.data;
 
 import com.google.gson.annotations.SerializedName;
 
-public class WeatherResponse {
+import java.io.Serializable;
+
+public class WeatherResponse implements Serializable {
     @SerializedName("coord")
     private Coord coord;
 

@@ -1,4 +1,4 @@
-package com.suraj.weatherapplication;
+package com.suraj.weatherapplication.view.activity;
 
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -6,7 +6,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class WeatherDetail extends AppCompatActivity {
+import com.suraj.weatherapplication.R;
+import com.suraj.weatherapplication.model.WeatherData;
+
+public class WeatherDetailActivity extends AppCompatActivity {
     private TextView cityNameTextView;
     private TextView weatherDescriptionTextView;
     private TextView temperatureTextView;
@@ -31,17 +34,17 @@ public class WeatherDetail extends AppCompatActivity {
         pressureTextView = findViewById(R.id.pressureTextView);
 
 
-        String[] weatherData = (String[]) getIntent().getSerializableExtra("WEATHER_DATA");
+        WeatherData weatherData = (WeatherData) getIntent().getParcelableExtra("WEATHER_DATA");
 
 
         if (weatherData != null) {
 
-            cityNameTextView.setText(weatherData[0]); // City name
-            weatherDescriptionTextView.setText(weatherData[1].substring(0, 1).toUpperCase() + weatherData[1].substring(1)); // Weather description
-            temperatureTextView.setText("Temperature "+weatherData[2]+" °C"); // Temperature
-            feelsLikeTextView.setText("Feels Like "+weatherData[3]+" °C"); // Feels Like
-            humidityTextView.setText("Humidity\n"+weatherData[4]+" %"); // Humidity
-            pressureTextView.setText("Pressure\n"+weatherData[5]+" Pa"); // Pressure
+            cityNameTextView.setText(weatherData.getCityName()); // City name
+            weatherDescriptionTextView.setText(weatherData.getWeatherDescription().substring(0, 1).toUpperCase() + weatherData.getWeatherDescription().substring(1)); // Weather description
+            temperatureTextView.setText("Temperature "+String.format("%.2f", weatherData.getTemperature())+" °C"); // Temperature
+            feelsLikeTextView.setText("Feels Like "+String.format("%.2f", weatherData.getFeelsLike())+" °C"); // Feels Like
+            humidityTextView.setText("Humidity\n"+weatherData.getHumidity()+" %"); // Humidity
+            pressureTextView.setText("Pressure\n"+weatherData.getPressure()+" Pa"); // Pressure
         }
     }
 }

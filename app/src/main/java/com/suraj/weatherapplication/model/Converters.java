@@ -1,4 +1,4 @@
-package com.suraj.weatherapplication.entity;
+package com.suraj.weatherapplication.model;
 
 import androidx.room.TypeConverter;
 

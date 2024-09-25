@@ -1,4 +1,4 @@
-package com.suraj.weatherapplication.api;
+package com.suraj.weatherapplication.data;
 
 public class APIConstants {
 

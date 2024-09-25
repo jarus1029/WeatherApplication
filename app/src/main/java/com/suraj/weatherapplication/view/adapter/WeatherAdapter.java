@@ -1,4 +1,4 @@
-package com.suraj.weatherapplication;
+package com.suraj.weatherapplication.view.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,7 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.suraj.weatherapplication.entity.WeatherEntity;
+import com.suraj.weatherapplication.R;
+import com.suraj.weatherapplication.model.WeatherData;
+import com.suraj.weatherapplication.model.WeatherEntity;
 
 import java.util.List;
 
@@ -38,20 +40,11 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherH
     @Override
     public void onBindViewHolder(@NonNull WeatherHolder holder, int position) {
         holder.cityName.setText(weatherData.get(position).getCityName());
-        String[] data = weatherData.get(position).getWeatherData();
-        if (data.length > 1) {
-            holder.description.setText(data[1]);
-        } else {
-            holder.description.setText("No description available");
-        }
+        WeatherData data = weatherData.get(position).getWeatherData();
 
-        if (data.length > 2) {
-            holder.temp.setText(data[2]+" °C");
-        } else {
-            holder.temp.setText("NA");
-        }
+            holder.description.setText(data.getWeatherDescription());
 
-
+            holder.temp.setText(String.format("%.2f", data.getTemperature())+" °C");
     }
 
     @Override
@@ -81,7 +74,13 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherH
         }
     }
 
-    interface ItemClicked{
+    public void updateWeatherData(List<WeatherEntity> newWeatherData) {
+        this.weatherData.clear();
+        this.weatherData.addAll(newWeatherData);
+        notifyDataSetChanged();
+    }
+
+    public interface ItemClicked{
         default void onClick(int position, View view)
         {
 
