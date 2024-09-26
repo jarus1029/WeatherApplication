@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         checkWeatherViewModel.getAllWeatherData().observe(this, weatherEntities -> {
+
             weatherAdapter = new WeatherAdapter(weatherEntities, this, new WeatherAdapter.ItemClicked() {
                 @Override
                 public void onClick(int position, View view) {
@@ -64,10 +65,13 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+
             recyclerView.setAdapter(weatherAdapter);
+
         });
 
          checkWeatherViewModel.getIsNewApiRequest().observe(this, isNewRequest -> {
+
             if (isNewRequest != null && isNewRequest) {
                 WeatherData weatherDetails = checkWeatherViewModel.getWeatherData().getValue();
                 if (weatherDetails != null) {
