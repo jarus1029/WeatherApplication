@@ -74,11 +74,6 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherH
         }
     }
 
-    public void updateWeatherData(List<WeatherEntity> newWeatherData) {
-        this.weatherData.clear();
-        this.weatherData.addAll(newWeatherData);
-        notifyDataSetChanged();
-    }
 
     public interface ItemClicked{
         default void onClick(int position, View view)

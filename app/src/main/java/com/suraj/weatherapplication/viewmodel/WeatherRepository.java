@@ -12,6 +12,7 @@ import com.suraj.weatherapplication.model.WeatherDao;
 import com.suraj.weatherapplication.model.WeatherData;
 import com.suraj.weatherapplication.model.WeatherEntity;
 import com.suraj.weatherapplication.data.WeatherResponse;
+import com.suraj.weatherapplication.utils.NetworkUtils;
 
 import java.util.List;
 
@@ -38,8 +39,6 @@ public class WeatherRepository {
         return retrofit.create(WeatherApi.class);
     }
 
-
-
     public List<WeatherEntity> getAllWeatherData() {
         return weatherDao.getAllWeatherData();
     }
@@ -48,12 +47,16 @@ public class WeatherRepository {
         return weatherDao.getWeatherByCity(city.toLowerCase());
     }
 
-    public void insertWeather(WeatherEntity weatherEntity) {
-        new Thread(() -> weatherDao.insertWeather(weatherEntity)).start();
+    public void insertWeather(WeatherEntity weatherEntity, WeatherResponse weatherResponse, ApiResponseCallbackClass.ApiResponseCallback responseCallback ) {
+        new Thread(() -> {
+            weatherDao.insertWeather(weatherEntity);
+            WeatherData weatherDt=getWeatherDataFromWeatherResponse(weatherResponse);
+            responseCallback.onSuccess(weatherDt);
+        }).start();
     }
 
-    public void fetchWeatherFromApi(String city, Context context, ApiResponseCallback callback) {
-        if (!isInternetAvailable(context)) {
+    public void fetchWeatherFromApi(String city, Context context, ApiResponseCallbackClass.ApiResponseCallback callback) {
+        if (!NetworkUtils.isInternetAvailable(context)) {
             callback.onFailure("No internet connection! Please check your network.");
             return;
         }
@@ -65,8 +68,7 @@ public class WeatherRepository {
                     WeatherResponse weatherResponse = response.body();
                     WeatherData weatherDt=getWeatherDataFromWeatherResponse(weatherResponse);
                     WeatherEntity weatherEntity = new WeatherEntity(city.toLowerCase(), weatherDt, System.currentTimeMillis());
-                    insertWeather(weatherEntity);
-                    callback.onSuccess(weatherDt);
+                    insertWeather(weatherEntity, weatherResponse, callback);
                 } else {
                     handleErrorResponse(response, callback);
                 }
@@ -79,21 +81,7 @@ public class WeatherRepository {
         });
     }
 
-
-    private boolean isInternetAvailable(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
-            return networkCapabilities != null &&
-                    (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR));
-        } else {
-            return connectivityManager.getActiveNetworkInfo() != null &&
-                    connectivityManager.getActiveNetworkInfo().isConnected();
-        }
-    }
-
-    private void handleErrorResponse(Response<WeatherResponse> response, ApiResponseCallback callback) {
+    private void handleErrorResponse(Response<WeatherResponse> response, ApiResponseCallbackClass.ApiResponseCallback callback) {
         switch (response.code()) {
             case 404:
                 callback.onFailure("City not found. Please check the city name !!");
@@ -110,10 +98,10 @@ public class WeatherRepository {
         }
     }
 
-    public interface ApiResponseCallback {
-        void onSuccess(WeatherData weatherData);
-        void onFailure(String errorMessage);
-    }
+//    public interface ApiResponseCallback {
+//        void onSuccess(WeatherData weatherData);
+//        void onFailure(String errorMessage);
+//    }
     private WeatherData getWeatherDataFromWeatherResponse(WeatherResponse weatherResponse)
     {
         String weatherDescription = weatherResponse.getWeather().length > 0
@@ -125,7 +113,7 @@ public class WeatherRepository {
         long pressure = weatherResponse.getMain().getPressure();
         String cityName = weatherResponse.getName();
 
-        WeatherData weatherDt = new WeatherData(
+        return new WeatherData(
                 cityName,
                 weatherDescription,
                 temperature,
@@ -133,7 +121,6 @@ public class WeatherRepository {
                 humidity,
                 pressure
         );
-        return weatherDt;
     }
 }
 

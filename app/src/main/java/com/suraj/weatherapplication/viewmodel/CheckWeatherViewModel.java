@@ -15,12 +15,10 @@ import java.util.List;
 
 public class CheckWeatherViewModel extends AndroidViewModel {
     private WeatherRepository weatherRepository;
-
     private MutableLiveData<List<WeatherEntity>> allWeatherData;
     private MutableLiveData<String> errorMessage;
     private MutableLiveData<WeatherData> weatherData;
     private MutableLiveData<Boolean> isLoading;
-    private MutableLiveData<Boolean> isNewApiRequest;
 
     public CheckWeatherViewModel(Application application) {
         super(application);
@@ -29,7 +27,7 @@ public class CheckWeatherViewModel extends AndroidViewModel {
         errorMessage = new MutableLiveData<>();
         weatherData = new MutableLiveData<>();
         isLoading = new MutableLiveData<>(false);
-        isNewApiRequest = new MutableLiveData<>(false);
+
     }
 
     public LiveData<List<WeatherEntity>> getAllWeatherData() {
@@ -49,9 +47,6 @@ public class CheckWeatherViewModel extends AndroidViewModel {
         return isLoading;
     }
 
-    public LiveData<Boolean> getIsNewApiRequest() {
-        return isNewApiRequest;
-    }
 
     public void checkWeather(String city) {
         isLoading.setValue(true);
@@ -62,19 +57,17 @@ public class CheckWeatherViewModel extends AndroidViewModel {
 
             if (weatherEntity != null && (currentTime - weatherEntity.timestamp) < (4 * 60 * 60 * 1000)) {
                 weatherData.postValue(weatherEntity.weatherData);
-                isNewApiRequest.postValue(false);
                 isLoading.postValue(false);
             } else {
-                weatherRepository.fetchWeatherFromApi(city, getApplication(), new WeatherRepository.ApiResponseCallback()
+                weatherRepository.fetchWeatherFromApi(city, getApplication(), new ApiResponseCallbackClass.ApiResponseCallback()
                 {
                     @Override
                     public void onSuccess(WeatherData weatherDataResponse) {
                         new Thread(()->{
-                            weatherData.postValue(weatherDataResponse);
-                            isNewApiRequest.postValue(true);
-                            isLoading.postValue(false);
                             allWeatherData.postValue(weatherRepository.getAllWeatherData());
-                            loadAllWeatherData();
+                            weatherData.postValue(weatherDataResponse);
+                            isLoading.postValue(false);
+
                         }).start();
                     }
 

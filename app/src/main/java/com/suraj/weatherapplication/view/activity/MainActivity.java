@@ -3,6 +3,7 @@ package com.suraj.weatherapplication.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.suraj.weatherapplication.R;
+import com.suraj.weatherapplication.data.CONSTANTS;
+import com.suraj.weatherapplication.databinding.ActivityMainBinding;
 import com.suraj.weatherapplication.model.WeatherData;
 import com.suraj.weatherapplication.view.adapter.WeatherAdapter;
 import com.suraj.weatherapplication.model.WeatherEntity;
@@ -33,21 +36,26 @@ public class MainActivity extends AppCompatActivity {
     private ConstraintLayout mainLayout;
     private ImageView searchButton;
 
+    ActivityMainBinding activityMainBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        activityMainBinding=ActivityMainBinding.inflate(getLayoutInflater());
+        View view=activityMainBinding.getRoot();
+        setContentView(view);
 
 
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
-        citySearch = findViewById(R.id.citySearch);
-        searchButton = findViewById(R.id.searchButton);
-        recyclerView = findViewById(R.id.recycler);
+        citySearch =activityMainBinding.citySearch;
+        searchButton = activityMainBinding.searchButton;
+        recyclerView = activityMainBinding.recycler;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        progressBar = findViewById(R.id.progressBar);
-        mainLayout = findViewById(R.id.innerLayout);
+        progressBar = activityMainBinding.progressBar;
+        mainLayout = activityMainBinding.innerLayout;
 
 
         CheckWeatherFactory factory = new CheckWeatherFactory(getApplication());
@@ -56,12 +64,13 @@ public class MainActivity extends AppCompatActivity {
 
         checkWeatherViewModel.getAllWeatherData().observe(this, weatherEntities -> {
 
+            Log.d("Suraj", "data changed" + weatherEntities.get(0).getCityName());
             weatherAdapter = new WeatherAdapter(weatherEntities, this, new WeatherAdapter.ItemClicked() {
                 @Override
                 public void onClick(int position, View view) {
                     WeatherEntity selectedCityWeather = weatherEntities.get(position);
                     Intent intent = new Intent(MainActivity.this, WeatherDetailActivity.class);
-                    intent.putExtra("WEATHER_DATA", selectedCityWeather.getWeatherData());
+                    intent.putExtra(CONSTANTS.INTENTEXTRANAME, selectedCityWeather.getWeatherData());
                     startActivity(intent);
                 }
             });
@@ -70,19 +79,17 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-         checkWeatherViewModel.getIsNewApiRequest().observe(this, isNewRequest -> {
 
-            if (isNewRequest != null && isNewRequest) {
-                WeatherData weatherDetails = checkWeatherViewModel.getWeatherData().getValue();
-                if (weatherDetails != null) {
 
-                    Intent intent = new Intent(MainActivity.this, WeatherDetailActivity.class);
-                    intent.putExtra("WEATHER_DATA", weatherDetails);
-                    startActivity(intent);
-                }
-            }
-        });
+         checkWeatherViewModel.getWeatherData().observe(this, weatherData -> {
+             WeatherData weatherDetails = checkWeatherViewModel.getWeatherData().getValue();
+             if (weatherDetails != null) {
 
+                 Intent intent = new Intent(MainActivity.this, WeatherDetailActivity.class);
+                 intent.putExtra(CONSTANTS.INTENTEXTRANAME, weatherDetails);
+                 startActivity(intent);
+             }
+         });
 
         checkWeatherViewModel.getErrorMessage().observe(this, message -> {
             if (message != null) {

@@ -25,25 +25,9 @@ public class WeatherEntity {
     public String getCityName() {
         return cityName;
     }
-
-    public void setCityName(@NonNull String cityName) {
-        this.cityName = cityName;
-    }
-
     public WeatherData getWeatherData() {
         return weatherData;
     }
 
-    public void setWeatherData(WeatherData weatherData) {
-        this.weatherData = weatherData;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
 }
 
