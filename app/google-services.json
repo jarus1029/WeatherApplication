@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "54248673315",
+    "project_id": "weatherapplication-126a7",
+    "storage_bucket": "weatherapplication-126a7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54248673315:android:8283e07a3d2c6d8982e196",
+        "android_client_info": {
+          "package_name": "com.suraj.weatherapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlsLoDl5jluMwtYmOTnGdgIIQ8c2HTZdg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -84,7 +84,7 @@ public class CheckWeatherViewModel extends AndroidViewModel {
     private void loadAllWeatherData() {
         new Thread(() -> {
             List<WeatherEntity> weatherDataList = weatherRepository.getAllWeatherData();
-            Log.d("WeatherData", "Loaded data: " + weatherDataList.get(0).getCityName());
+//            Log.d("WeatherData", "Loaded data: " + weatherDataList.get(0).getCityName());
             allWeatherData.postValue(weatherDataList);
         }).start();
     }

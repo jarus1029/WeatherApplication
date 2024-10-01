@@ -16,7 +16,7 @@ public interface WeatherDao {
     WeatherEntity getWeatherByCity(String cityName);
 
     @Query("SELECT * FROM weather ORDER BY timestamp DESC LIMIT 10")
-    List<WeatherEntity> getAllWeatherData();
+    List<WeatherEntity> getTop10WeatherDataFromDb();
 
 
 }

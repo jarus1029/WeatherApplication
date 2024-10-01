@@ -40,7 +40,7 @@ public class WeatherRepository {
     }
 
     public List<WeatherEntity> getAllWeatherData() {
-        return weatherDao.getAllWeatherData();
+        return weatherDao.getTop10WeatherDataFromDb();
     }
 
     public WeatherEntity getWeatherByCity(String city) {
@@ -98,10 +98,6 @@ public class WeatherRepository {
         }
     }
 
-//    public interface ApiResponseCallback {
-//        void onSuccess(WeatherData weatherData);
-//        void onFailure(String errorMessage);
-//    }
     private WeatherData getWeatherDataFromWeatherResponse(WeatherResponse weatherResponse)
     {
         String weatherDescription = weatherResponse.getWeather().length > 0

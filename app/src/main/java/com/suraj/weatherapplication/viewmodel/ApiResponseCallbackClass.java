@@ -4,7 +4,7 @@ import com.suraj.weatherapplication.model.WeatherData;
 
 public class ApiResponseCallbackClass {
 
-    public static interface ApiResponseCallback {
+    public  interface ApiResponseCallback {
         void onSuccess(WeatherData weatherData);
         void onFailure(String errorMessage);
     }
