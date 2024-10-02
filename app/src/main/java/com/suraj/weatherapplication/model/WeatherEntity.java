@@ -15,6 +15,9 @@ public class WeatherEntity {
     public WeatherData weatherData;
     public long timestamp;
 
+    public WeatherEntity() {
+    }
+
     public WeatherEntity(String cityName, WeatherData weatherData, long timestamp) {
         this.cityName = cityName;
         this.weatherData = weatherData;

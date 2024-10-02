@@ -11,6 +11,9 @@ public class WeatherData implements Parcelable {
     private int humidity;
     private long pressure;
 
+    public WeatherData() {
+    }
+
 
     public WeatherData(String cityName, String weatherDescription, double temperature, double feelsLike, int humidity, long pressure) {
         this.cityName = cityName;
