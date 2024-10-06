@@ -56,8 +56,6 @@ public class WeatherRepository {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         List<WeatherEntity> tempList = new ArrayList<>();
-
-
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             WeatherEntity entity = snapshot.getValue(WeatherEntity.class);
                             tempList.add(entity);
@@ -78,13 +76,16 @@ public class WeatherRepository {
 
 
     public WeatherEntity getWeatherByCity(String city) {
+        Log.d("firebaseCheck","Firebase mai check kr rha");
         WeatherEntity[] weatherEntity = new WeatherEntity[1];
 
         databaseReference.child("weatherData").child(city.toLowerCase()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("firebaseCheck","on data change ke andr mai check kr rha");
                 if (dataSnapshot.exists()) {
                     weatherEntity[0] = dataSnapshot.getValue(WeatherEntity.class);
+                    Log.d("firebaseResponse",weatherEntity[0]+"");
                 }
             }
 
@@ -93,7 +94,6 @@ public class WeatherRepository {
                 Log.e("FirebaseError", "Error fetching data for city: " + city, databaseError.toException());
             }
         });
-
         return weatherEntity[0];
     }
 
@@ -102,7 +102,8 @@ public class WeatherRepository {
                 .setValue(weatherEntity)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        WeatherData weatherDt = getWeatherDataFromWeatherResponse(weatherResponse);
+                        WeatherData weatherDt = getWeatherDataFromWeatherResponse(weatherResponse,System.currentTimeMillis());
+                        Log.d("insertSucc",weatherEntity.timestamp+" ");
                         responseCallback.onSuccess(weatherDt);
                     } else {
                         responseCallback.onFailure("Error saving data to Firebase");
@@ -121,10 +122,11 @@ public class WeatherRepository {
             public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
                 Log.d("response","got the response");
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.d("response","got the response");
+                    Log.d("response","got the successfull response");
                     WeatherResponse weatherResponse = response.body();
-                    WeatherData weatherDt = getWeatherDataFromWeatherResponse(weatherResponse);
+                    WeatherData weatherDt = getWeatherDataFromWeatherResponse(weatherResponse,System.currentTimeMillis());
                     WeatherEntity weatherEntity = new WeatherEntity(city.toLowerCase(), weatherDt, System.currentTimeMillis());
+//                    Log.d("inserting time",weatherEntity.timestamp+" "+ System.currentTimeMillis());
                     insertWeather(weatherEntity, weatherResponse, callback);
                 } else {
                     handleErrorResponse(response, callback);
@@ -156,7 +158,7 @@ public class WeatherRepository {
         }
     }
 
-    private WeatherData getWeatherDataFromWeatherResponse(WeatherResponse weatherResponse) {
+    private WeatherData getWeatherDataFromWeatherResponse(WeatherResponse weatherResponse,long timestamp) {
         String weatherDescription = weatherResponse.getWeather().length > 0
                 ? weatherResponse.getWeather()[0].getDescription()
                 : "No data";
@@ -172,7 +174,8 @@ public class WeatherRepository {
                 temperature,
                 feelsLike,
                 humidity,
-                pressure
+                pressure,
+                timestamp
         );
     }
 }

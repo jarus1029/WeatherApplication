@@ -73,13 +73,9 @@ public class MainActivity extends AppCompatActivity {
         recentsTextView=activityMainBinding.textViewRecents;
 
 
+
         CheckWeatherFactory factory = new CheckWeatherFactory(getApplication());
         checkWeatherViewModel = new ViewModelProvider(this, factory).get(CheckWeatherViewModel.class);
-
-        changeRecentsTextColorUsingRemoteConfig();
-
-
-
 
         checkWeatherViewModel.getAllWeatherData().observe(this, weatherEntities -> {
 
@@ -97,6 +93,12 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setAdapter(weatherAdapter);
 
         });
+
+        changeRecentsTextColorUsingRemoteConfig();
+
+
+
+
 
 
 

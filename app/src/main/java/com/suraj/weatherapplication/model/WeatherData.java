@@ -10,18 +10,20 @@ public class WeatherData implements Parcelable {
     private double feelsLike;
     private int humidity;
     private long pressure;
+    private long timestamp;
 
     public WeatherData() {
     }
 
 
-    public WeatherData(String cityName, String weatherDescription, double temperature, double feelsLike, int humidity, long pressure) {
+    public WeatherData(String cityName, String weatherDescription, double temperature, double feelsLike, int humidity, long pressure,long timestamp) {
         this.cityName = cityName;
         this.weatherDescription = weatherDescription;
         this.temperature = temperature;
         this.feelsLike = feelsLike;
         this.humidity = humidity;
         this.pressure = pressure;
+        this.timestamp=timestamp;
     }
 
 
@@ -84,6 +86,10 @@ public class WeatherData implements Parcelable {
 
     public long getPressure() {
         return pressure;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
     }
 
     @Override
