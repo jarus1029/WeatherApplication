@@ -3,6 +3,8 @@ package com.suraj.weatherapplication.viewmodel;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -77,23 +79,14 @@ public class WeatherRepository {
 
     public WeatherEntity getWeatherByCity(String city) {
         Log.d("firebaseCheck","Firebase mai check kr rha");
-        WeatherEntity[] weatherEntity = new WeatherEntity[1];
-
-        databaseReference.child("weatherData").child(city.toLowerCase()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("firebaseCheck","on data change ke andr mai check kr rha");
-                if (dataSnapshot.exists()) {
-                    weatherEntity[0] = dataSnapshot.getValue(WeatherEntity.class);
-                    Log.d("firebaseResponse",weatherEntity[0]+"");
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e("FirebaseError", "Error fetching data for city: " + city, databaseError.toException());
-            }
-        });
+        final WeatherEntity[] weatherEntity = new WeatherEntity[1];
+        try {
+            Task<DataSnapshot> snapshotTask = databaseReference.child("weatherData").child(city.toLowerCase()).get();
+            DataSnapshot snapshot = Tasks.await(snapshotTask);
+            weatherEntity[0] = snapshot.getValue(WeatherEntity.class);
+        } catch ( Exception ec) {
+            Log.e("firebaseError", "ExecutionException: Error while fetching data from Firebase"+ec);
+        }
         return weatherEntity[0];
     }
 

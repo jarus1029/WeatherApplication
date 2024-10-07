@@ -56,9 +56,7 @@ public class CheckWeatherViewModel extends AndroidViewModel {
 
             long currentTime = System.currentTimeMillis();
 //            Log.d("firebaseCheck",currentTime+" "+ weatherEntity.weatherData.getTimestamp());
-
-
-            if (weatherEntity != null && (currentTime - weatherEntity.timestamp) < (4 * 60 * 60 * 1000)) {
+            if (weatherEntity != null && (currentTime - weatherEntity.weatherData.getTimestamp()) < (4 * 60 * 60 * 1000)) {
                 Log.d("firebaseCheck","less than ke andar");
                 weatherData.postValue(weatherEntity.weatherData);
                 isLoading.postValue(false);
@@ -71,7 +69,6 @@ public class CheckWeatherViewModel extends AndroidViewModel {
                             allWeatherData.postValue(weatherRepository.getAllWeatherData());
                             weatherData.postValue(weatherDataResponse);
                             isLoading.postValue(false);
-
                         }).start();
                     }
 

@@ -32,6 +32,7 @@ import com.suraj.weatherapplication.R;
 import com.suraj.weatherapplication.data.CONSTANTS;
 import com.suraj.weatherapplication.databinding.ActivityMainBinding;
 import com.suraj.weatherapplication.model.WeatherData;
+import com.suraj.weatherapplication.utils.NetworkUtils;
 import com.suraj.weatherapplication.view.adapter.WeatherAdapter;
 import com.suraj.weatherapplication.model.WeatherEntity;
 import com.suraj.weatherapplication.viewmodel.CheckWeatherViewModel;
@@ -94,12 +95,8 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        // use of remote config from firebase to change recents text color
         changeRecentsTextColorUsingRemoteConfig();
-
-
-
-
-
 
 
          checkWeatherViewModel.getWeatherData().observe(this, weatherData -> {
@@ -135,7 +132,13 @@ public class MainActivity extends AppCompatActivity {
             String city = citySearch.getText().toString().trim();
             hideKeyboard(v);
             if (!city.isEmpty()) {
-                checkWeatherViewModel.checkWeather(city);
+                if(NetworkUtils.isInternetAvailable(getApplicationContext())) {
+                    checkWeatherViewModel.checkWeather(city);
+                }
+                else
+                {
+                    Snackbar.make(v, "No Internet Connection", Snackbar.LENGTH_SHORT).show();
+                }
             } else {
                 Snackbar.make(v, "Please enter a city name!", Snackbar.LENGTH_SHORT).show();
             }
