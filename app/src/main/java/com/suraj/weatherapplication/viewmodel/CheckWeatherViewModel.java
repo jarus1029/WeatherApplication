@@ -50,7 +50,6 @@ public class CheckWeatherViewModel extends AndroidViewModel {
 
     public void checkWeather(String city) {
         isLoading.setValue(true);
-
         new Thread(() -> {
             WeatherEntity weatherEntity = weatherRepository.getWeatherByCity(city);
             long currentTime = System.currentTimeMillis();
